@@ -18,3 +18,4 @@ def openCSV():
 #    with open("vystup_rok.csv", "w", encoding = "utf-8", newline="") as f365:
 
 openCSV()
+#kontrola()
