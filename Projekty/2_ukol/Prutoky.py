@@ -11,7 +11,6 @@ def openCSV():
 #def vypocet():
 #    celk = 0
 
-
 #def pocitej7():
 #    with open("vystup_7dni.csv","w", encoding = "utf-8", newline="") as f7:
 
@@ -19,4 +18,3 @@ def openCSV():
 #    with open("vystup_rok.csv", "w", encoding = "utf-8", newline="") as f365:
 
 openCSV()
-
