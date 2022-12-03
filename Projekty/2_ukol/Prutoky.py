@@ -8,8 +8,11 @@ def openCSV():
 #def kontrola():
 #    try:
         
+
 #def vypocet():
 #    celk = 0
+
+
 
 #def pocitej7():
 #    with open("vystup_7dni.csv","w", encoding = "utf-8", newline="") as f7:
