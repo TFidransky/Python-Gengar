@@ -16,14 +16,10 @@ def openCSV():
         
 
 
-def vypocet():
-    celk = 0
-    for row in reader:
-        if row[-1] > 0:
-            celk += int(row[-1])
-        elif row[3] == "FALSE":
-            celk += 0
-    print("Kapacita P+R parkovišť je", celk)
+#def vypocet():
+#    celk = 0
+
+
 
 #def pocitej7():
 #    with open("vystup_7dni.csv","w", encoding = "utf-8", newline="") as f7:
