@@ -1,2 +1,0 @@
-Toto je první řádek.
-Toto je druhý řádek.
