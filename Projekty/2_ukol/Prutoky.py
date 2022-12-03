@@ -20,6 +20,5 @@ def openCSV():
 #def pocitej365():
 #    with open("vystup_rok.csv", "w", encoding = "utf-8", newline="") as f365:
 
-
 openCSV()
 
