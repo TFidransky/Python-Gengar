@@ -1,14 +1,10 @@
 import csv
-from csv import reader
-from os import listdir
-from collections import defaultdict
 from datetime import datetime
-from operator import itemgetter
-from pprint import pprint
 
 def openCSV():
     with open ("vstup.csv", encoding = "utf-8", newline="") as f:
         reader = csv.reader(f, delimiter = ",")
+
 
 
 #def kontrola():
