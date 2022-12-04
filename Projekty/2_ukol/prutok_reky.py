@@ -4,14 +4,14 @@ from math import floor
 import copy
 
 
-def openCSV() -> []:
+def openCSV() -> []: # otevírá soubor, pokud bude error, tak to vyhodí do konzole hlášku
     file = None
     reader = None
     try:
         file = open("vstup.csv", "r")
         reader = csv.reader(file)
     except:
-        print("Chyba pri nacitani vstupu")
+        print("Chyba pri načítání vstupu")
 
     rows = []  # prázdný list
     for row in reader:
@@ -22,60 +22,60 @@ def openCSV() -> []:
     return rows
 
 
-def parseToWeeks(rows: []):  # rozdělí to po 7 dnech (=týdny), weeks je []
-    i = 0
+def parseToWeeks(rows: []):  # rozdělí to po 7 dnech (=týdny), weeks je [], jiná situace u posledního týdne co nemá 7 dní
+    row_number = 0
     weeks = []
 
     #nacti cele tydny
     for number_of_week in range(0, floor(len(rows) / 7)):
         weeks.append([])
         for day in range(0, 7):
-            weeks[number_of_week].append(rows[i])
-            i = i + 1
+            weeks[number_of_week].append(rows[row_number])
+            row_number = row_number + 1
 
     #nacti posledni tyden
-    if i != len(weeks):
+    if row_number != len(rows):
         weeks.append([])
-        for day in range(0, len(rows) - i):
-            weeks[len(weeks) - 1].append(rows[i])
+        for day in range(0, len(rows) - row_number):
+            weeks[len(weeks) - 1].append(rows[row_number])
 
-    return weeks
+    return weeks # vrácení weeks pro další výpočty
 
-def parseToYears(rows: []):
+def parseToYears(rows: []): # rozdělí to na jednotlivé roky (=years)
     year_idx = 0
     years = [[]]
-    current_year = getYearFromDate(rows[0][2])
+    current_year = getYearFromDate(rows[0][2]) #vytáhne v jakém roce aktuálně jsme
 
     for row in rows:
-        if getYearFromDate(row[2]) == current_year:
+        if getYearFromDate(row[2]) == current_year: # pokud jsme ve stejném roce, tak to přirazuje k danému roku
             years[year_idx].append(row)
         else:
-            current_year = getYearFromDate(row[2])
+            current_year = getYearFromDate(row[2]) # pokud se změní rok, tak se to posune o +1 (1990 → 1991) a poté to bude zas provádět dokud to bude rok 1991
             year_idx = year_idx + 1
             years.append([])
             years[year_idx].append(row)
 
     return years
 
-def getYearFromDate(date: string):
+def getYearFromDate(date: string): # splitne formát roku (v základu format dd.mm.rrrr, potřebujeme to na dd, mm, rrrr)
     dateSplit = date.split(".")
     return int(dateSplit[2])
 
 def calculatePeriodAverage(period):  # projede všechny dny v týdnu, poté vydělí počtem dnů v daném týdnu
-    amounts = []  # průtoky
+    amounts = []  # průtoky hodnoty
     for day in period:
         amounts.append(float(day[3].strip()))
 
-    return sum(amounts) / len(amounts)
+    return sum(amounts) / len(amounts) # vrací průměr za daný týden
 
-def writePeriodToCsv(first_day, average, filename):
+def writePeriodToCsv(first_day, average, filename): # zápis do CSV souborů (vystup_7dni.csv a vystup_rok.csv)
     file = open(filename, 'a')
     writer = csv.writer(file)
-    dayToWrite = copy.deepcopy(first_day)
+    dayToWrite = copy.deepcopy(first_day) # deepcopy slouží k tomu, aby to neměnilo původní proměnnou - first_day
     dayToWrite[3] = '{0:.4f}'.format(average)
     writer.writerow(dayToWrite)
 
-def min_max_prutok (rows):
+def min_max_prutok (rows): # zjišťuje minimální a maximální průtok, pak to vypíše i s dnem kdy to minimum / maximum nastalo
     max_prutok = rows[0][-1]
     max_prutok_den = rows[0][-2]
     min_prutok = rows[0][-1]
