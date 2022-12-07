@@ -10,7 +10,7 @@ class EmptyFileException(Exception):
         self.message = message
 
 # otevírá soubor, poté to odchytává error, v případě, že tam je, tak to uživateli vyhodí hlášku do konzole
-def open_csv():
+def open_csv() -> [str]:
     rows = []
 
     try:
@@ -33,29 +33,30 @@ def open_csv():
     return rows
 
 # funkce rozdělí řádky na týdny (7 dní = týden), pokud poslední týden < 7 dní, tak to vezme taky jako týden, nehledě na délce
-def split_to_weeks(rows: []):
+def split_to_weeks(rows: []) -> [[str]]:
     final_idx = 0
     weeks = []
 
     # nacti cele tydny
     for number_of_week in range(0, floor(len(rows) / 7)):
-        weeks.append([])
+        week = []
         for row_number in range(0, 7):
-            weeks[number_of_week].append(rows[final_idx])
+            week.append(rows[final_idx])
             final_idx = final_idx + 1
+        weeks.append(week)
 
     # nacti posledni tyden
     if final_idx != len(rows):
-        weeks.append([])
+        week = []
         for row_number in range(0, len(rows) - final_idx):
-            weeks[len(weeks) - 1].append(rows[final_idx])
-
+            week.append(rows[final_idx])
+        weeks.append(week)
     return weeks  # vrácení hodnot pro další výpočty
 
 # rozděluje dataset na jednotlivé roky (=years). Nejdřív to vytáhne první rok, který v datasetu je, poté to porovnává s dalšími řádky.
 # Dokud jsme ve stejném roce, tak to bude přiřazovat ke stejnému roku
 # Jakmile se rok změní, tak se naše proměnná posune o 1 rok a začne znovu nabírat data pro tento rok.
-def split_to_years(rows: []):  # rozdělí to na jednotlivé roky (=years)
+def split_to_years(rows: []) -> [[str]]:  # rozdělí to na jednotlivé roky (=years)
     year_idx = 0
     years = [[]]
     current_year = get_year_from_date(rows[0][2])
