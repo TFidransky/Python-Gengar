@@ -4,12 +4,12 @@ from math import floor
 import copy
 import os
 
-
+# třída pro výjimku prázdného souboru. Chtěl jsem se vyhnout užití knihovny pandas, když není ve VS Code defaultně a musí se stáhnout
 class EmptyFileException(Exception):
     def __init__(self, message):
         self.message = message
 
-# otevírá soubor, poté to odchytává error, v případě, že tam je, tak to uživateli vyhodí hlášku do konzole
+# otevírá soubor, poté to odchytává errory, v případě, že tam je, tak to uživateli vyhodí hlášku do konzole
 def open_csv() -> [str]:
     rows = []
 
@@ -18,16 +18,19 @@ def open_csv() -> [str]:
             reader = csv.reader(f, delimiter=",")
 
             if os.stat("vstup.csv").st_size == 0:
-                raise EmptyFileException("File is empty")
+                raise EmptyFileException("Soubor je prázdný.")
 
             for row in reader:
                 rows.append(row)
 
     except EmptyFileException:
-        print("File is empty")
+        print("Soubor je prázdný.")
         exit(1)
     except FileNotFoundError:
-        print("File not found")
+        print("Soubor nebyl nalezen")
+        exit(1)
+    except Exception as e:
+        print("Jiná chyba.")
         exit(1)
 
     return rows
@@ -37,7 +40,7 @@ def split_to_weeks(rows: []) -> [[str]]:
     final_idx = 0
     weeks = []
 
-    # nacti cele tydny
+    # cele tydny
     for number_of_week in range(0, floor(len(rows) / 7)):
         week = []
         for row_number in range(0, 7):
@@ -45,7 +48,7 @@ def split_to_weeks(rows: []) -> [[str]]:
             final_idx = final_idx + 1
         weeks.append(week)
 
-    # nacti posledni tyden
+    # posledni (nekompletní, nemá 7 dní) tyden
     if final_idx != len(rows):
         week = []
         for row_number in range(0, len(rows) - final_idx):
