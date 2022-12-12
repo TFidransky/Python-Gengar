@@ -1,9 +1,15 @@
-# funkce, ač tady je možná mírně nadbytečná, vzhledem k délce kódu, nicméně takhle lze celá funkce přesunout do jiného programu
-# nejdříve se vytvoří prázdný slovník, poté se spustí for cyklus, dlouhý podle délky inputu. Pokud už znak je někdy započítán, tak se přičte +1, pokud ne, tak se mu přidělí 1.
-# To se provádí znovu do té doby, než se ukončí for cyklus (= dojede na konec inputu).
-# char_freq je poté seřazeno podle četnosti znaků, pokud se "u" vyskytlo 4x a "b" 3x, tak "u" bude první, ač abecedně by bylo druhé
-# poslední for cyklus tiskne znaky, opět dokud nevypíše všechny znaky co se objevily v inputu.
+import re
+
+# Nejdrive promenna string odstrani nevhodne symboly, ktere by se v tabulce pletly - predevsim ",", ".", "?", "!". Respektive
+# to odstrani všechny symboly, ktere nejsou v abecede nebo to nejsou cisla
+# Pote se vytvori prazdny slovnik, pote se spusti for cyklus, dlouhy podle delky inputu. Pokud uz znak byl nekdy zapocitan (= objevil se v stringu drive),
+# tak se pricte +1, pokud ne, tak se mu prideli 1. To se provadi znovu do te doby, nez se ukonci for cyklus (= dojede na konec inputu).
+# char_freq se pote seradi podle cetnosti znaku, tedy pokud se napr. "u" vyskytlo 4x a "b" 3x, tak "u" bude prvni, ac abecedne by bylo druhe
+# poslední for cyklus tiskne znaky, opet dokud nevypise vsechny znaky co se objevily v inputu.
+
+
 def print_char_freq(string):
+  string = string.upper()
   char_freq = {}
 
   for char in string:
@@ -18,5 +24,5 @@ def print_char_freq(string):
   for char, freq in char_freq:
     print(f"{char}: {freq}")
 
-string = input("Zadeje větu, u které chcete zjistit frekvenci: ")
+string = input("Zadeje vetu, u ktere chcete zjistit frekvenci: ")
 print_char_freq(string)
