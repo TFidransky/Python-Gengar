@@ -23,4 +23,3 @@ def find_most_common_element(input_file):
     return (most_common, frequency)
 
 most_common, frequency = find_most_common_element('vstup.csv')
-

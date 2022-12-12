@@ -7,7 +7,6 @@ import re
 # char_freq se pote seradi podle cetnosti znaku, tedy pokud se napr. "u" vyskytlo 4x a "b" 3x, tak "u" bude prvni, ac abecedne by bylo druhe
 # poslední for cyklus tiskne znaky, opet dokud nevypise vsechny znaky co se objevily v inputu.
 
-
 def print_char_freq(string):
   string = string.upper()
   char_freq = {}
