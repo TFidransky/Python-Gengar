@@ -9,7 +9,7 @@ class EmptyFileException(Exception):
     def __init__(self, message):
         self.message = message
 
-# otevírá soubor, poté to odchytává errory, v případě, že tam je, tak to uživateli vyhodí hlášku do konzole
+# otevírá soubor, poté to odchytává errory, v případě, že tam je, tak to uživateli vyhodí příslušnou hlášku do konzole
 def open_csv() -> [str]:
     rows = []
 
@@ -18,24 +18,31 @@ def open_csv() -> [str]:
             reader = csv.reader(f, delimiter=",")
 
             if os.stat("vstup.csv").st_size == 0:
-                raise EmptyFileException("Soubor je prázdný.")
+                raise EmptyFileException("Vstupní soubor je prázdný.")
 
             for row in reader:
+                if len(row) < 4:
+                    raise IndexError("Ve vstupním souboru je méně sloupců než se očekávalo.")
+                try:
+                    last_column = float(row[-1])
+                except ValueError:
+                    raise ValueError("Poslední sloupec není platné desetinné číslo.")
                 rows.append(row)
 
-    except EmptyFileException:
-        print("Soubor je prázdný.")
+    except EmptyFileException as EmptyFile:
+        print(EmptyFile)
         exit(1)
     except FileNotFoundError:
-        print("Soubor nebyl nalezen")
+        print("Vstupní soubor nebyl nalezen.")
         exit(1)
-    except Exception as e:
-        print("Jiná chyba.")
+    except (ValueError, IndexError) as e:
+        print(e)
         exit(1)
 
     return rows
 
-# funkce rozdělí řádky na týdny (7 dní = týden), pokud poslední týden < 7 dní, tak to vezme taky jako týden, nehledě na délce
+# funkce rozdělí dataset na týdny (7 dní = týden), pokud počet dnů není dělitelný 7, tak to poslední hodnoty 
+# (co se nevešly do posledního plného týdne (= dělitelného 7)) vezme jako nekompletní týden a dá ho jako týden o x dnech
 def split_to_weeks(rows: []) -> [[str]]:
     final_idx = 0
     weeks = []
@@ -45,16 +52,18 @@ def split_to_weeks(rows: []) -> [[str]]:
         week = []
         for row_number in range(0, 7):
             week.append(rows[final_idx])
-            final_idx = final_idx + 1
+            final_idx += 1
         weeks.append(week)
 
-    # posledni (nekompletní, nemá 7 dní) tyden
+    # poslední (nekompletní, nemá 7 dní) týden
     if final_idx != len(rows):
         week = []
         for row_number in range(0, len(rows) - final_idx):
             week.append(rows[final_idx])
-        weeks.append(week)
-    return weeks  # vrácení hodnot pro další výpočty
+            final_idx += 1
+        if len(week) > 0:
+            weeks.append(week)
+    return weeks
 
 # rozděluje dataset na jednotlivé roky (=years). Nejdřív to vytáhne první rok, který v datasetu je, poté to porovnává s dalšími řádky.
 # Dokud jsme ve stejném roce, tak to bude přiřazovat ke stejnému roku
